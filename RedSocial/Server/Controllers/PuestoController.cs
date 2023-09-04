@@ -20,7 +20,7 @@ namespace RedSocial.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Puesto>>> Get()
         {
-            var pepe = await context.puestos.ToListAsync();
+            var pepe = await context.Puestos.ToListAsync();
             if (pepe == null || pepe.Count == 0)
             {
                 return BadRequest("No existen Puestos");
@@ -31,12 +31,12 @@ namespace RedSocial.Server.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Puesto>> Get(int id)
         {
-            var existe = await context.puestos.AnyAsync(x => x.ID == id);
-            if (!existe)
+            var existe = await context.Puestos.FirstOrDefaultAsync(x => x.Id == id);
+            if (existe is null)
             {
-                return NotFound($"La Especialidad {id} no existe");
+                return NotFound($"El cargo de {id} no existe");
             }
-            return await context.puestos.FirstOrDefaultAsync(x => x.ID == id);
+            return (existe);
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace RedSocial.Server.Controllers
         {
             try
             {
-                var existe = await context.Trabajadores.AnyAsync(x => x.ID == entidad.CodPuesto);
+                var existe = await context.Trabajadores.AnyAsync(x => x.Id == entidad.CodPuesto);
                 if (!existe)
                 {
                     return NotFound($"El puesto de id={entidad.CodPuesto} no existe");
@@ -52,12 +52,12 @@ namespace RedSocial.Server.Controllers
 
                 Puesto pepe = new Puesto();
 
-                pepe.IDTrabajador = entidad.CodPuesto;
+                pepe.IdTrabajador = entidad.CodPuesto;
                 pepe.CodPuesto = entidad.CodPuesto;
 
                 await context.AddAsync(pepe);
                 await context.SaveChangesAsync();
-                return pepe.ID;
+                return pepe.Id;
             }
             catch (Exception e)
             {
@@ -67,12 +67,12 @@ namespace RedSocial.Server.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put(Puesto entidad, int id)
         {
-            if (id != entidad.ID)
+            if (id != entidad.Id)
             {
                 return BadRequest("El id del Puesto no corresponde.");
             }
 
-            var existe = await context.puestos.AnyAsync(x => x.ID == id);
+            var existe = await context.Puestos.AnyAsync(x => x.Id == id);
             if (!existe)
             {
                 return NotFound($"El puesto de id={id} no existe");
@@ -86,13 +86,13 @@ namespace RedSocial.Server.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await context.puestos.AnyAsync(x => x.ID == id);
+            var existe = await context.Puestos.AnyAsync(x => x.Id == id);
             if (!existe)
             {
                 return NotFound($"El puesto de id={id} no existe");
             }
             Puesto pepe = new Puesto();
-            pepe.ID = id;
+            pepe.Id = id;
 
             context.Remove(pepe);
 

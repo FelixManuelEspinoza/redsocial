@@ -1,6 +1,8 @@
 using BDRedSocial.Data;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-var conn = builder.Configuration.GetConnectionString("conn");
-builder.Services.AddDbContext<DBcontext>(opciones =>opciones.UseSqlServer(conn));
+
+builder.Services.AddDbContext<DBcontext>(opciones =>opciones.UseSqlServer("name=conn"));
+builder.Services.AddSwaggerGen(c =>
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RedSocial", Version = "v1" }));
+
 
 var app = builder.Build();
 
@@ -17,6 +22,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RedSocial v1"));
 }
 else
 {

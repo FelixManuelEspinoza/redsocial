@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BDRedSocial.Data.Entidades
 {
-    [Index(nameof(Correo), Name ="Correo_Trabajador", IsUnique = true)]
+    //[Index(nameof(Correo), Name ="Correo_Trabajador", IsUnique = true)]
     public class Trabajador
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre es requerido")]
         [MaxLength(20, ErrorMessage = "Solo se aceptan hasta 20 caracteres en el nombre")]
@@ -33,6 +33,8 @@ namespace BDRedSocial.Data.Entidades
         [MaxLength(40, ErrorMessage = "Solo se aceptan hasta 40 caracteres en el correo")]
         public string Correo { get; set; }
 
+        public int IdPuesto { get; set; }
+        public Puesto Puestos { get; set; }
 
     }
 }

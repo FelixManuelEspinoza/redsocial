@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BDRedSocial.Data.Entidades
 {
-    [Index(nameof(CodCarRed), Name = "Codigo_Cargo_Red", IsUnique = true)]
+    //[Index(nameof(CodCarRed), Name = "Codigo_Cargo_Red", IsUnique = true)]
     public class CargoRed
     {
-        public int ID {get;set;}
+        public int Id {get;set;}
 
 
         [Required(ErrorMessage = "El Codigo de Cargo de Red es Obligatorio")]
@@ -22,6 +22,7 @@ namespace BDRedSocial.Data.Entidades
         [MaxLength(40, ErrorMessage = "Solo se aceptan hasta 40 caracteres en la Descripción de la Especialidad")]
         public string DescCargoRed { get;set;}
 
+        public int IdTrabajador { get; set; }
         public List<Trabajador> Trabajadores { get; set; } = new List<Trabajador>();
     }
 }

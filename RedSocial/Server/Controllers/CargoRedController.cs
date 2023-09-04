@@ -20,46 +20,47 @@ namespace RedSocial.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CargoRed>>> Get()
         {
-            var pepe = await context.CargosRed.ToListAsync();
-            return pepe;
+            var cargo = await context.CargosRed.ToListAsync();
+            return cargo;
         }
 
-        [HttpGet("{id:int}")]
+        /*[HttpGet("{id:int}")]
         public async Task<ActionResult<CargoRed?>> Get(int id)
         {
-            var existe = await context.CargosRed.AnyAsync(x => x.ID == id);
+            var existe = await context.CargosRed.AnyAsync(x => x.Id == id);
             if (!existe)
             {
                 return NotFound($"El Cargo de Red {id} no existe");
             }
-            return await context.CargosRed.FirstOrDefaultAsync(prof => prof.ID == id);
-        }
+            return await context.CargosRed.FirstOrDefaultAsync(prof => prof.Id == id);
+        }*/
 
-        [HttpGet("{cod}")]
-        public async Task<ActionResult<CargoRed>> Get(string cod)
+        [HttpGet("{int:cod}")]
+        public async Task<ActionResult<CargoRed>> Get(int cod)
         {
-            var existe = await context.CargosRed.AnyAsync(x => x.CodCarRed == cod);
-            if (!existe)
+            var existe = await context.CargosRed.FirstOrDefaultAsync(x => x.CodCarRed == cod);
+            if (existe is null)
             {
-                return NotFound($"La profesión de id={cod} no existe");
+                return NotFound($"El codigo = {cod} e cargo de red no existe");
             }
-            return await context.CargosRed.FirstOrDefaultAsync(prof => prof.CodCarRed == cod);
+            return existe;
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(CargoRedODT profesion)
+        public async Task<ActionResult<int>> Post(CargoRedODT cargoODT)
         {
-            CargoRed pepe = new CargoRed();
+            CargoRed cargo = new CargoRed();
 
-            pepe.CodCarRed = profesion.CodCarRed;
+            cargo.CodCarRed = cargoODT.CodCarRed;
+            cargo.DescCargoRed = cargoODT.DescCargoRed;
 
 
 
-
-            await context.AddAsync(pepe);
+            await context.AddAsync(cargo);
             await context.SaveChangesAsync();
-            return pepe.ID;
+            return Ok();
         }
+
 
 
         
